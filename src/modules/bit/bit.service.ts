@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom, map } from 'rxjs';
 import { TransactionRespository } from './transaction.repository';
 import { Transaction } from './transaction.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class BitService {
@@ -61,5 +61,17 @@ export class BitService {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  async viewTransactions() {
+    const allSendTransactions = await this.transactionRepository.find({
+      nobSendData: Not(IsNull()),
+    });
+    const finalRes = [];
+    allSendTransactions.forEach((e) => {
+      finalRes.push(e.nobSendData);
+    });
+
+    return finalRes;
   }
 }

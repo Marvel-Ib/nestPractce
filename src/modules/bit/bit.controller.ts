@@ -21,7 +21,13 @@ export class BitController {
   }
 
   @Post('/send')
+  @UsePipes(ValidationPipe)
   sendBitcoin(@Body() sendBitcoin: sendBitcoinDto) {
     return this.bitservice.sendBitcoin(sendBitcoin);
+  }
+
+  @Get('/view')
+  viewTransactions() {
+    return this.bitservice.viewTransactions();
   }
 }
