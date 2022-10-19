@@ -1,11 +1,20 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom, map } from 'rxjs';
+import { TransactionRespository } from './transaction.repository';
+import { Transaction } from './transaction.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BitService {
-  constructor(private http: HttpService, private config: ConfigService) {}
+  constructor(
+    private http: HttpService,
+    private config: ConfigService,
+    @InjectRepository(Transaction)
+    private transactionRepository: Repository<Transaction>,
+  ) {}
 
   async generateBitcoinAddress(address) {
     try {
@@ -30,16 +39,23 @@ export class BitService {
     try {
       const responseData = await lastValueFrom(
         this.http
-          .post(this.config.get('baseUrl') + 'addresses/generate', sendParam, {
-            headers: { Authorization: this.config.get('bearer') },
-          })
+          .post(
+            this.config.get('baseUrl') + 'wallets/send_bitcoin',
+            sendParam,
+            {
+              headers: { Authorization: this.config.get('bearer') },
+            },
+          )
           .pipe(
             map((response) => {
               return response.data;
             }),
           ),
       );
-      return responseData;
+      // return responseData;
+      const transact = new Transaction();
+      transact.nobSendData = responseData.data;
+      return await this.transactionRepository.save(transact);
     } catch (e) {
       console.log(e);
     }
