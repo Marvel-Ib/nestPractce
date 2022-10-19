@@ -7,4 +7,7 @@ export class Transaction extends BaseEntity {
 
   @Column('simple-json', { nullable: true })
   nobSendData;
+
+  @Column({ nullable: true })
+  nobGeneratedAddress: string;
 }

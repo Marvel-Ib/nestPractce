@@ -29,7 +29,9 @@ export class BitService {
             }),
           ),
       );
-      return responseData;
+      const transact = new Transaction();
+      transact.nobGeneratedAddress = responseData.data.address;
+      return await this.transactionRepository.save(transact);
     } catch (e) {
       console.log(e);
     }
