@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { lastValueFrom, map } from 'rxjs';
-import { TransactionRespository } from './transaction.repository';
 import { Transaction } from './transaction.entity';
 import { IsNull, Not, Repository } from 'typeorm';
 
