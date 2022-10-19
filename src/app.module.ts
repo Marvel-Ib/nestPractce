@@ -4,8 +4,8 @@ import { AppService } from './app.service';
 import { BitModule } from './modules/bit/bit.module';
 
 @Module({
-  imports: [BitModule],
   controllers: [AppController],
   providers: [AppService],
+  imports: [BitModule],
 })
 export class AppModule {}
